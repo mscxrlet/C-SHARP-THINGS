@@ -1,0 +1,135 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+namespace TestSimpleGuide
+{
+public class Game1 : Game
+{
+GraphicsDeviceManager graphics;
+SpriteBatch spriteBatch;
+//A private field boxTexture and ballTexture type Texture2D
+//Texture2D is used to store images.
+Texture2D boxTexture, ballTexture;
+//A private field boxRectangle, ballRectangle type Rectangle
+//Rectangle is used for storing location and size.
+Rectangle boxRectangle, ballRectangle;
+//A private field boxColor and ballColor type Color
+//Color is used for tinting of image.
+Color boxColor, ballColor;
+bool checkBox, checkBall;
+public Game1()
+{
+graphics = new GraphicsDeviceManager(this);
+Content.RootDirectory =
+"Content";
+IsMouseVisible = true;
+}
+{
+protected override void Initialize()
+//Initialization of boxRectangle and ballRectangleDisplay
+//Rectangle Object parameter is x-axis,y-axis,width,height
+boxRectangle = new Rectangle(300, 0, 100, 100);
+ballRectangle = new Rectangle(0, 200, 100, 100);
+values.
+//Initialization of boxColor and ballColor
+//Color Structure represents a color using Red, Green, Blue, and Alpha
+boxColor = Color.White;
+ballColor = Color.White;
+checkBall = true;
+checkBox = true;
+base.Initialize();
+}
+protected override void LoadContent()
+{
+spriteBatch = new SpriteBatch(GraphicsDevice);
+//Initialization of boxTexture and ballTexture using the assets from
+Monogame Pipeline
+boxTexture = Content.Load<Texture2D>("Box");
+ballTexture = Content.Load<Texture2D>("Ball");
+}
+protected override void UnloadContent()
+{
+}
+protected override void Update(GameTime gameTime)
+{
+//This condition will be true if the mouse pointer doesn't point to the
+boxRectangle
+//and doesn't pressed the left mouse button
+if (!(boxRectangle.Contains(new Point(Mouse.GetState().X,
+Mouse.GetState().Y))
+&& Mouse.GetState().LeftButton == ButtonState.Pressed))
+{
+//This condition will be true if the y-axis position of boxRectangle
+is less than or equal to 0
+if (boxRectangle.Y <= 0)
+{
+checkBox = true;
+}
+//This condition will be true if the bottom of the boxRectangle touch
+the bottom of the Game Window
+//Window.ClientBounds.Height refers to the height of the Game Window
+else if (boxRectangle.Y >= Window.ClientBounds.Height - 100)
+{
+checkBox = false;
+}
+if (checkBox)
+{
+boxRectangle.Y += 2;
+}
+else
+{
+boxRectangle.Y -= 2;
+}
+}
+//This condition will be true if ballRectangle and boxRectangle doesn't
+collide to each other
+//and the mouse pointer doesn't point to the ballRectangle
+if (!ballRectangle.Intersects(boxRectangle)
+&& !ballRectangle.Contains(new Point(Mouse.GetState().X,
+Mouse.GetState().Y)))
+{
+//This condition will be true if the x-axis position of ballRectangle
+is less than or equal to 0
+if (ballRectangle.X <= 0)
+{
+checkBall = true;
+}
+//This condition will be true if the right side of the ballRectangle
+touch the right side of the Game Window
+//Window.ClientBounds.Width refers to the width of the Game Window
+else if (ballRectangle.X >= Window.ClientBounds.Width - 100)
+{
+checkBall = false;
+}
+{
+if (checkBall)
+ballRectangle.X += 2;
+}
+else
+{
+}
+ballRectangle.X -= 2;
+}
+base.Update(gameTime);
+}
+{
+protected override void Draw(GameTime gameTime)
+//Clears the Game Window everyframe.
+GraphicsDevice.Clear(Color.CornflowerBlue);
+//All sprites must be drawn between a SpriteBatch.Begin and a
+SpriteBatch.End.
+spriteBatch.Begin();
+texture,
+//It adds a sprite to a batch of sprites for rendering using the specified
+//destination rectangle, and color.
+spriteBatch.Draw(boxTexture, boxRectangle, boxColor);
+texture,
+//It adds a sprite to a batch of sprites for rendering using the specified
+//destination rectangle, source rectangle, and color.
+spriteBatch.Draw(ballTexture, ballRectangle, Color.White);
+spriteBatch.End();
+base.Draw(gameTime);
+}
+}
+}

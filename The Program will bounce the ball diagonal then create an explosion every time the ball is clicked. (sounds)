@@ -1,0 +1,250 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+namespace TestSup2
+{
+public class Game1 : Game
+{
+GraphicsDeviceManager graphics;
+SpriteBatch spriteBatch;
+//A private field explosion type Explosion
+//Explosion is used for animating and displaying explosion spritesheet
+Explosion explosion;
+//A private field ball type ball
+//Explosion is used for displaying ball image
+Ball ball;
+public Game1()
+{
+graphics = new GraphicsDeviceManager(this);
+Content.RootDirectory = "Content";
+IsMouseVisible = true;
+}
+protected override void Initialize()
+{
+//Declaring and Initializing local variable for explosion field object
+parameters
+Texture2D explosionTexture = Content.Load<Texture2D>("Explosion");
+Rectangle display = new Rectangle(0, 0, 100, 100);
+Rectangle source = new Rectangle(0, 0, explosionTexture.Width / 8,
+explosionTexture.Height / 4);
+Color explosionTinting = Color.White;
+explosion = new Explosion(explosionTexture, display, source,
+explosionTinting);
+//Declaring and Initializing local variable for explosion field object
+parameters
+Texture2D ballTexture = Content.Load<Texture2D>("Ball");
+Rectangle ballDisplay = new Rectangle(40, 200, 50, 50);
+Color ballColor = Color.White;
+ball = new Ball(ballTexture, ballDisplay, ballColor,
+Window.ClientBounds.Width - 50, Window.ClientBounds.Height - 50);
+base.Initialize();
+}
+protected override void LoadContent()
+{
+spriteBatch = new SpriteBatch(GraphicsDevice);
+}
+protected override void UnloadContent()
+{
+}
+protected override void Update(GameTime gameTime)
+{
+//Used for calling animateExplosion method of explosio field and check if the
+animation is done then reset it.
+if (explosion.PlayExplosion)
+{
+}
+explosion.animateExplosion();
+//Create an Explosion Object Everytime left mouse Button is Click the ball
+if(Mouse.GetState().LeftButton == ButtonState.Pressed &&
+ball.BallRectangle.Contains(Mouse.GetState().Position))
+{
+Texture2D explosionTexture = Content.Load<Texture2D>("Explosion");
+Rectangle display = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y,
+100, 100);
+Rectangle source = new Rectangle(0, 0, explosionTexture.Width / 8,
+explosionTexture.Height / 4);
+Color explosionTinting = Color.White;
+explosion = new Explosion(explosionTexture, display, source,
+explosionTinting);
+//Applying Sound hit
+SoundEffect hitEffect = Content.Load<SoundEffect>("hit");
+SoundEffectInstance hitSound = hitEffect.CreateInstance();
+hitSound.Play();
+}
+//Pause the animation if the right mouse button is clicked
+if (Mouse.GetState().RightButton == ButtonState.Pressed)
+{
+explosion.PlayExplosion = false;
+}
+ball.BallMove();
+base.Update(gameTime);
+}
+protected override void Draw(GameTime gameTime)
+{
+//Clears the Game Window everyframe.
+GraphicsDevice.Clear(Color.CornflowerBlue);
+//All sprites must be drawn between a SpriteBatch.Begin and a
+SpriteBatch.End.
+spriteBatch.Begin();
+//Display the explosion effect using spriteBatch Draw method. All details
+needed will came from
+//explosion field.
+spriteBatch.Draw(explosion.ExplosionTexture,
+explosion.ExplosionDisplay,
+explosion.ExplosionSource,
+explosion.ExplosionColor);
+//Display ball image while moving
+spriteBatch.Draw(ball.BallTexture, ball.BallRectangle, ball.BallColor);
+//Display The Ball Position
+spriteBatch.DrawString(Content.Load<SpriteFont>("GameFont"),
+"Ball Position: "+ball.BallRectangle.Location,
+new Vector2(Window.ClientBounds.Width / 2 - 50, 10), Color.White);
+//Display The Mouse Position
+spriteBatch.DrawString(Content.Load<SpriteFont>("GameFont"),
+"Mouse Position: " + Mouse.GetState().Position,
+new Vector2(Window.ClientBounds.Width / 2 - 50, 40), Color.Green);
+spriteBatch.End();
+base.Draw(gameTime);
+}
+}
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+namespace TestSup2
+{
+class Explosion
+{
+//A private field explosionTexture type Texture2D
+//Texture2D is used to store images.
+Texture2D explosionTexture;
+//A private field explosionDisplay and explosionSource type Rectangle
+//Rectangle is used for storing location(x-axis and y-axis) and size(width and
+height)
+Rectangle explosionDisplay, explosionSource;
+//A private field explosionColor type Color
+//Color is used for tinting of image
+Color explosionColor;
+//A private field explosionSourcePosition type Point
+//Point is used for position of the rectangle
+Point explosionSourcePosition;
+//A private field playExplosion type bool
+//Used for checking if the animation is done
+bool playExplosion;
+//Explosion Constructor for initializing all the private fields
+public Explosion(Texture2D explosionTexture, Rectangle explosionDisplay,
+Rectangle explosionSource, Color explosionColor)
+{
+this.explosionTexture = explosionTexture;
+this.explosionDisplay = explosionDisplay;
+this.explosionSource = explosionSource;
+this.explosionColor = explosionColor;
+explosionSourcePosition = new Point(0, 0);
+playExplosion = true;
+}
+//Property that will be used for retrieving the data from private fields except
+for explosionSourcePosition
+public Texture2D ExplosionTexture { get { return explosionTexture; } }
+public Rectangle ExplosionDisplay { get { return explosionDisplay; } }
+public Rectangle ExplosionSource { get { return explosionSource; } }
+public Color ExplosionColor { get { return explosionColor; } }
+public bool PlayExplosion { get { return playExplosion; } set { playExplosion =
+value; } }
+//This method will be used to play the explosion animation by moving the position
+of explosionSource
+//Rectangle.
+public void animateExplosion()
+{
+if(explosionSourcePosition.X < explosionSource.Width * 7)
+{
+explosionSourcePosition.X += explosionSource.Width;
+}
+else
+{
+explosionSourcePosition.Y += explosionSource.Height;
+explosionSourcePosition.X = 0;
+if (explosionSourcePosition.Y > explosionSource.Height * 4)
+{
+playExplosion = false;
+}
+}
+explosionSource.Location = explosionSourcePosition;
+}
+}
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+namespace TestSup2
+{
+class Ball
+{
+//A private field ballTexture type Texture2D
+Texture2D ballTexture;
+//A private field ballRectangle type Rectangle
+Rectangle ballRectangle;
+//A private field ballColor type Color
+Color ballColor;
+//A private field boundaryX and boundaryY type int. Boundary for ball movement.
+int boundaryX, boundaryY;
+//A private field directionX and directionY type bool. direction for ball
+movement.
+bool directionX, directionY;
+//Ball Constructor for initializing all the private fields
+public Ball(Texture2D ballTexture, Rectangle ballRectangle, Color ballColor, int
+boundaryX, int boundaryY)
+{
+this.ballTexture = ballTexture;
+this.ballRectangle = ballRectangle;
+this.ballColor = ballColor;
+this.boundaryX = boundaryX;
+this.boundaryY = boundaryY;
+directionX = true;
+directionY = true;
+}
+//Property that will be used for retrieving the data from private fields except
+for int and bool type
+public Texture2D BallTexture { get { return ballTexture; } }
+public Rectangle BallRectangle { get { return ballRectangle; } }
+public Color BallColor { get { return ballColor; } }
+//This method will be used for ball movement
+public void BallMove()
+{
+if(ballRectangle.X <= 0)
+{
+directionX = true;
+}else if(ballRectangle.X >= boundaryX)
+{
+directionX = false;
+}
+{
+if (ballRectangle.Y <= 0)
+directionY = true;
+}
+else if (ballRectangle.Y >= boundaryY)
+{
+directionY = false;
+}
+{
+if (directionX)
+ballRectangle.X += 2;
+}
+else
+{
+ballRectangle.X -= 2;
+}
+{
+if (directionY)
+ballRectangle.Y += 2;
+}
+else
+{
+ballRectangle.Y -= 2;
+}
+}
+}
+}
+//Add Sound Assets

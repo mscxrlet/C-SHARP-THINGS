@@ -1,0 +1,45 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics; using
+Microsoft.Xna.Framework.Input; using System;
+namespace TestSimpleGuide
+{
+public class Game1 : Game
+{
+GraphicsDeviceManager graphics; SpriteBatch
+spriteBatch;
+public Game1()
+{
+graphics = new GraphicsDeviceManager(this); Content.RootDirectory =
+//Make the mouse visible on top of the Game Window
+IsMouseVisible = true;
+//Adjust the Game Window Screen Width
+graphics.PreferredBackBufferWidth = 500;
+//Adjust the Game Window Screen Height
+graphics.PreferredBackBufferHeight = 500;
+//It is the amount of time between each frame being drawn.
+//This statement means 1 frame per second
+//The default value is 60fps equal to TimeSpan(0,0,0,0,50)
+TargetElapsedTime = new TimeSpan(0, 0, 1);
+}
+{
+}
+{
+}
+{
+}
+protected override void Initialize()
+base.Initialize();
+protected override void LoadContent()
+spriteBatch = new SpriteBatch(GraphicsDevice);
+protected override void UnloadContent()
+"Content";
+protected override void Update(GameTime gameTime)
+{
+base.Update(gameTime);
+}
+protected override void Draw(GameTime gameTime)
+{
+GraphicsDevice.Clear(Color.CornflowerBlue); base.Draw(gameTime);
+}
+}
+}

@@ -1,0 +1,187 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+namespace TestSup2
+{
+public class Game1 : Game
+{
+GraphicsDeviceManager graphics;
+SpriteBatch spriteBatch;
+//A private field explosion type Explosion
+//Explosion is used for animating and displaying explosion spritesheet
+Explosion explosion;
+public Game1()
+{
+graphics = new GraphicsDeviceManager(this);
+Content.RootDirectory =
+"Content";
+IsMouseVisible = true;
+}
+{
+parameters
+protected override void Initialize()
+//Declaring and Initializing local variable for explosion field object
+Texture2D explosionTexture = Content.Load<Texture2D>("Explosion");
+Rectangle display = new Rectangle(0, 0, 100, 100);
+Rectangle source = new Rectangle(
+0,
+0,
+explosionTexture.Width / 8,
+explosionTexture.Height / 4
+);
+Color explosionTinting = Color.White;
+explosion = new Explosion(
+explosionTexture,
+display,
+source,
+explosionTinting
+);
+base.Initialize();
+}
+protected override void LoadContent()
+spriteBatch = new SpriteBatch(GraphicsDevice);
+protected override void UnloadContent()
+protected override void Update(GameTime gameTime)
+{
+}
+{
+}
+{
+//Used for calling animateExplosion method of explosion field and check if
+animation is done then reset it.
+if (explosion.PlayExplosion)
+{
+explosion.animateExplosion();
+}
+//Create an Explosion Object Everytime left mouse Button is Click
+if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+{
+Texture2D explosionTexture = Content.Load<Texture2D>("Explosion");
+Rectangle display = new Rectangle(
+Mouse.GetState().X,
+Mouse.GetState().Y,
+100,
+100
+);
+Rectangle source = new Rectangle(
+0,
+0,
+explosionTexture.Width / 8,
+explosionTexture.Height / 4
+);
+Color explosionTinting = Color.White;
+explosion = new Explosion(
+explosionTexture,
+display,
+source,
+explosionTinting
+);
+}
+//Pause the animation if the right mouse button is clicked
+if (Mouse.GetState().RightButton == ButtonState.Pressed)
+{
+explosion.PlayExplosion = false;
+}
+base.Update(gameTime);
+}
+{
+protected override void Draw(GameTime gameTime)
+//Clears the Game Window everyframe.
+GraphicsDevice.Clear(Color.CornflowerBlue);
+//All sprites must be drawn between a SpriteBatch.Begin and a
+SpriteBatch.End.
+spriteBatch.Begin();
+//Display the explosion effect using spriteBatch Draw method.
+spriteBatch.Draw(
+explosion.ExplosionTexture,
+explosion.ExplosionDisplay,
+explosion.ExplosionSource,
+explosion.ExplosionColor
+);
+spriteBatch.End();
+base.Draw(gameTime);
+}
+}
+}
+// Explosion Class
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+namespace TestSup2
+{
+class Explosion
+{
+//A private field explosionTexture type Texture2D
+//Texture2D is used to store images.
+Texture2D explosionTexture;
+//A private field explosionDisplay and explosionSource type Rectangle
+//Rectangle is used for storing location and size.
+Rectangle explosionDisplay;
+Rectangle explosionSource;
+//A private field explosionColor type Color
+//Color is used for tinting of image
+Color explosionColor;
+//A private field explosionSourcePosition type Point
+//Point is used for position of the rectangle
+Point explosionSourcePosition;
+bool playExplosion;
+//Explosion Constructor for initializing all the private fields
+public Explosion(
+Texture2D explosionTexture,
+Rectangle explosionDisplay,
+Rectangle explosionSource,
+Color explosionColor)
+{
+this.explosionTexture = explosionTexture;
+this.explosionDisplay = explosionDisplay;
+this.explosionSource = explosionSource;
+this.explosionColor = explosionColor;
+explosionSourcePosition = new Point(0, 0);
+playExplosion = true;
+}
+//Property that will be used for retrieving the data from private fields
+except for explosionSourcePosition
+public Texture2D ExplosionTexture
+{
+get { return explosionTexture; }
+}
+public Rectangle ExplosionDisplay
+get { return explosionDisplay; }
+public Rectangle ExplosionSource
+get { return explosionSource; }
+public Color ExplosionColor
+get { return explosionColor; }
+{
+}
+{
+}
+{
+}
+{
+public bool PlayExplosion
+get { return playExplosion; }
+set { playExplosion = value; }
+}
+//This method will be used to play the explosion animation by moving the
+position of explosionSource
+//Rectangle.
+public void animateExplosion()
+{
+if (explosionSourcePosition.X < explosionSource.Width * 7)
+{
+}
+else
+{
+explosionSourcePosition.X += explosionSource.Width;
+explosionSourcePosition.Y += explosionSource.Height;
+explosionSourcePosition.X = 0;
+if (explosionSourcePosition.Y > explosionSource.Height * 4)
+{
+}
+playExplosion = false;
+}
+explosionSource.Location = explosionSourcePosition;
+}
+}
+}

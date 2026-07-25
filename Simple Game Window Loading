@@ -1,0 +1,55 @@
+//It provides commonly needed game classes such as timers and game loops.
+using Microsoft.Xna.Framework;
+//It contains low-level application programming interface (API) methods
+//that take advantage of hardware acceleration capabilities to display 3D objects.
+using Microsoft.Xna.Framework.Graphics;
+//It contains classes to receive input from keyboard, mouse, and Xbox 360 Controller devices.
+using Microsoft.Xna.Framework.Input;
+namespace TestSimpleGuide
+{
+// This is the main type for your game.
+//Game1 class is a derived class of Game class.
+//All the accessible members of Game class will be inherited by Game1 class.
+public class Game1 : Game
+{
+//It handles the configuration and management of the graphics device.
+GraphicsDeviceManager graphics;
+//It enables a group of sprites to be drawn using the same settings.
+SpriteBatch spriteBatch;
+public Game1()
+{
+//It creates a new GraphicsDeviceManager and registers it to handle
+//the configuration and management of the graphics device for the specified Game.
+graphics = new GraphicsDeviceManager(this);
+Content.RootDirectory =
+"Content";
+}
+//Method where all the game logic variable should be initialize although game assets can be initialize here also
+protected override void Initialize()
+base.Initialize();
+//Method where all the game assets variable should be initialize although game logic can be initialize here also
+protected override void LoadContent()
+{
+}
+{
+// It create a new SpriteBatch, which can be used to draw textures.
+spriteBatch = new SpriteBatch(GraphicsDevice);
+}
+//Executed once the game window is closed
+//Unload any non ContentManager content here
+protected override void UnloadContent()
+{
+}
+//Game Loop for Logic.
+protected override void Update(GameTime gameTime)
+{
+base.Update(gameTime);
+}
+//Game Loop for graphics.
+protected override void Draw(GameTime gameTime)
+{
+//It clears the viewport to a specified color
+GraphicsDevice.Clear(Color.CornflowerBlue); base.Draw(gameTime);
+}
+}
+}

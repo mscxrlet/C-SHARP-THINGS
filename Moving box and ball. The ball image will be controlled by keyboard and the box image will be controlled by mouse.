@@ -1,0 +1,106 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+namespace TestSimpleGuide
+{
+public class Game1 : Game
+{
+GraphicsDeviceManager graphics;
+SpriteBatch spriteBatch;
+// A private field boxTexture and ballTexture type Texture2D
+// Texture2D is used to store images.
+Texture2D boxTexture, ballTexture;
+// A private field boxRectangle, ballRectangle type Rectangle
+// Rectangle is used for storing location and size.
+Rectangle boxRectangle, ballRectangle;
+// A private field boxColor and ballColor type Color
+// Color is used for tinting of image.
+Color boxColor, ballColor;
+public Game1()
+{
+graphics = new GraphicsDeviceManager(this);
+Content.RootDirectory =
+"Content";
+IsMouseVisible = true;
+}
+values.
+protected override void Initialize()
+{
+// Initialization of boxRectangle and ballRectangleDisplay
+// Rectangle Object parameter is x-axis,y-axis,width,height
+boxRectangle = new Rectangle(0, 0, 100, 100);
+ballRectangle = new Rectangle(0, 200, 100, 100);
+// Initialization of boxColor and ballColor
+// Color Structure represents a color using Red, Green, Blue, and Alpha
+boxColor = Color.White;
+ballColor = Color.White;
+base.Initialize();
+}
+protected override void LoadContent()
+{
+spriteBatch = new SpriteBatch(GraphicsDevice);
+// Initialization of boxTexture and ballTexture using the assets from
+Monogame Pipeline
+boxTexture = Content.Load<Texture2D>("Box");
+ballTexture = Content.Load<Texture2D>("Ball");
+protected override void UnloadContent()
+}
+{
+}
+{
+protected override void Update(GameTime gameTime)
+// Assigning the mouse X position to boxX type int
+int boxX = Mouse.GetState().X;
+// Assigning the mouse Y position to boxY type int
+int boxY = Mouse.GetState().Y;
+// Assigning the value of boxX and boxY to boxRectangle.Location using the
+Point Object
+boxRectangle.Location = new Point(boxX, boxY);
+// Assigning the x-axis of ballRectangle to ballX type int
+int ballX = ballRectangle.X;
+// Assigning the y-axis of ballRectangle to ballY type int
+int ballY = ballRectangle.Y;
+// This condition will be true if the left arrow key is pressed
+if (Keyboard.GetState().IsKeyDown(Keys.Left))
+{
+ballX -= 1;
+}
+// This condition will be true if the right arrow key is pressed
+if (Keyboard.GetState().IsKeyDown(Keys.Right))
+{
+ballX += 1;
+}
+// This condition will be true if the up arrow key is pressed
+if (Keyboard.GetState().IsKeyDown(Keys.Up))
+{
+ballY -= 1;
+}
+// This condition will be true if the down arrow key is pressed
+if (Keyboard.GetState().IsKeyDown(Keys.Down))
+{
+ballY += 1;
+}
+// Assigning the value of ballX and ballY to ballRectangle.Location using
+the Point Object
+ballRectangle.Location = new Point(ballX, ballY);
+base.Update(gameTime);
+}
+protected override void Draw(GameTime gameTime)
+{
+// Clears the Game Window every frame.
+GraphicsDevice.Clear(Color.CornflowerBlue);
+// All sprites must be drawn between a SpriteBatch.Begin and a
+SpriteBatch.End.
+spriteBatch.Begin();
+// It adds a sprite to a batch of sprites for rendering using the specified
+texture, destination rectangle, and color.
+spriteBatch.Draw(boxTexture, boxRectangle, boxColor);
+// It adds a sprite to a batch of sprites for rendering using the specified
+texture, destination rectangle, source rectangle, and color.
+spriteBatch.Draw(ballTexture, ballRectangle, Color.White);
+spriteBatch.End();
+base.Draw(gameTime);
+}
+}
+}

@@ -1,0 +1,584 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+namespace TestCatchingGame
+{
+class Player
+{
+//A private field playerTexture type Texture2D.
+Texture2D playerTexture;
+//A private field playerRectangleDisplay type Rectangle. This is for the
+displacement in the Game Window.
+Rectangle playerRectangleDisplay;
+//A private field playerRectangleSource type Rectangle. This is for the portion
+or part of the image going to be display in the Game Window.
+Rectangle playerRectangleSource;
+//A private field playerColor type Color.
+Color playerColor;
+//A private field playerBoundary array type int. This is for the Game Window
+boundary.
+int[] playerBoundary;
+//Player class Constructor
+public Player(Texture2D playerTexture, Rectangle playerRectangleDisplay,
+Rectangle playerRectangleSource, Color playerColor,
+int[] playerBoundary)
+{
+this.playerTexture = playerTexture;
+this.playerRectangleDisplay = playerRectangleDisplay;
+this.playerRectangleSource = playerRectangleSource;
+this.playerColor = playerColor;
+this.playerBoundary = playerBoundary;
+}
+//Property for playerTexture. Retrieve only
+public Texture2D PlayerTexture {
+get
+{
+return playerTexture;
+}
+}
+//Property for playerRectangleDisplay. Retrieve only.
+public Rectangle PlayerRectangleDisplay {
+get { return playerRectangleDisplay; }
+}
+//Property for playerRectangleSource. Retrieve only.
+public Rectangle PlayerRectangleSource {
+get {
+return playerRectangleSource;
+}
+}
+//Property for playerColor. Retrieve only.
+public Color PlayerColor
+{
+get
+{
+return playerColor;
+}
+}
+//Method for player position in the screen. This method have Keys parameter that
+identifies a particular key on a keyboard.
+public void playerMove(Keys key)
+{
+//Assign the x-axis value of playerRectangleDisplay to moveX
+int moveX = playerRectangleDisplay.X;
+//Assign the y-axis value of playerRectangleDisplay to moveY
+int moveY = playerRectangleDisplay.Y;
+//check if the keys is equal to left arrow key
+if (key == Keys.Left)
+{
+moveX -= 2;
+}
+//check if the keys is equal to right arrow key
+if (key == Keys.Right)
+{
+moveX += 2;
+}
+//check if the keys is equal to up arrow key
+if (key == Keys.Up)
+{
+moveY -= 2;
+}
+//check if the keys is equal to down arrow key
+if (key == Keys.Down)
+{
+moveY += 2;
+}
+//check if the value of moveX is inside the Game Window
+if (moveX > 0 && moveX < playerBoundary[0])
+{
+playerRectangleDisplay.X = moveX;
+}
+//check if the value of moveY is inside the Game Window
+if (moveY > 0 && moveY < playerBoundary[1])
+{
+playerRectangleDisplay.Y = moveY;
+}
+}
+//Method for player spritesheet animation in the screen. This method have Keys
+parameter that identifies a particular key on a keyboard.
+public void playerAnimation(Keys key)
+{
+//Assign the height value of playerRectangleSource to playerRow.
+int playerRow = playerRectangleSource.Height;
+//Assign the x-axis value of playerRectangleSource to animX.
+int animX = playerRectangleSource.X;
+//Assign the y-axis value of playerRectangleSource to animY.
+int animY = playerRectangleSource.Y;
+//check if the keys is equal to left arrow key
+if (key == Keys.Left)
+{
+//Animating the second row of the spritesheet
+playerRow *= 1;
+animY = playerRow;
+if(animX <= 0)
+{
+animX = playerRectangleSource.Width * 8;
+}
+else
+{
+animX -= playerRectangleSource.Width;
+}
+}
+//check if the keys is equal to right arrow key
+if (key == Keys.Right)
+{
+//Animating the fourth row of the spritesheet
+playerRow *= 3;
+animY = playerRow;
+if (animX >= playerRectangleSource.Width * 8)
+{
+animX = 0;
+}
+else
+{
+animX += playerRectangleSource.Width;
+}
+}
+//check if the keys is equal to up arrow key
+if (key == Keys.Up)
+{
+//Animating the first row of the spritesheet
+playerRow *= 0;
+animY = playerRow;
+if (animX <= 0)
+{
+animX = playerRectangleSource.Width * 8;
+}
+else
+{
+animX -= playerRectangleSource.Width;
+}
+}
+//check if the keys is equal to down arrow key
+if (key == Keys.Down)
+{
+//Animating the third row of the spritesheet
+playerRow *= 2;
+animY = playerRow;
+if (animX >= playerRectangleSource.Width * 8)
+{
+animX = 0;
+}
+else
+{
+animX += playerRectangleSource.Width;
+}
+}
+//Assigning the value of animX to the x-axis of playerRectangleSource
+playerRectangleSource.X = animX;
+//Assigning the value of animY to the y-axis of playerRectangleSource
+playerRectangleSource.Y = animY;
+}
+}
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+namespace TestCatchingGame
+{
+class Targets
+{
+//A private field targetTexture type Texture2D.
+Texture2D targetTexture;
+//A private field targetDisplay type Rectangle.
+Rectangle targetDisplay;
+//A private field targetColor type Color.
+Color targetColor;
+//Targets class Constructor
+public Targets(Texture2D targetTexture, Rectangle targetDisplay, Color
+targetColor)
+{
+this.targetTexture = targetTexture;
+this.targetDisplay = targetDisplay;
+this.targetColor = targetColor;
+}
+//Property for targetTexture. Retrieve only.
+public Texture2D TargetTexture { get { return targetTexture; } }
+//Property for targetDisplay. Retrieve only.
+public Rectangle TargetDisplay { get { return targetDisplay; } }
+//Property for targetColor. Retrieve only.
+public Color TargetColor { get { return targetColor; } }
+}
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+namespace TestCatchingGame
+{
+class GameLabels
+{
+//A private field gameFont type SpriteFont
+SpriteFont gameFont;
+//A private field gameTime and gameScore type string
+string gameTime, gameScore;
+//A private field timePosition and scorePosition type Vector2
+Vector2 timePosition, scorePosition;
+//A private field timeColor and scoreColor type Color
+Color timeColor, scoreColor;
+//A private field timeCtr and scoreCtr type int
+int timeCtr, scoreCtr;
+//GameLabels Constructor
+public GameLabels(SpriteFont gameFont, string gameTime, string gameScore, Vector2
+timePosition, Vector2 scorePosition, Color timeColor, Color scoreColor, int timeCtr, int
+scoreCtr)
+{
+this.gameFont = gameFont;
+this.gameTime = gameTime;
+this.gameScore = gameScore;
+this.timePosition = timePosition;
+this.scorePosition = scorePosition;
+this.timeColor = timeColor;
+this.scoreColor = scoreColor;
+this.timeCtr = timeCtr;
+this.scoreCtr = scoreCtr;
+}
+//Property of gameFont. Retrieving only
+public SpriteFont GameFont { get => gameFont; }
+//Property of gameTime. Retrieving only
+public string GameTime { get => gameTime; }
+//Property of gameScore. Retrieving only
+public string GameScore { get => gameScore; }
+//Property of timePosition. Retrieving only
+public Vector2 TimePosition { get => timePosition; }
+//Property of scorePosition. Retrieving only
+public Vector2 ScorePosition { get => scorePosition; }
+//Property of timeColor. Retrieving only
+public Color TimeColor { get => timeColor; }
+//Property of scoreColor. Retrieving only
+public Color ScoreColor { get => scoreColor; }
+//Property of timeCtr. Retrieving only
+public int TimeCtr { get => timeCtr; }
+//Method for decrementing the time.
+public void gameTimeSetup()
+{
+if(timeCtr > 0)
+{
+timeCtr--;
+}
+gameTime = "Time: " + timeCtr;
+}
+//Method for incrementing the score.
+public void scoreSetup()
+{
+scoreCtr++;
+gameScore = "Score: " + scoreCtr;
+}
+}
+}
+---------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.Xna.Framework;
+using System;
+namespace TestCatchingGame
+{
+public class GameData
+{
+//A private field lastPlayerPosition type Rectangle. It will hold the last
+rectangle of the player.
+public Rectangle lastPlayerPosition;
+//A private field lastTargetPosition type Rectangle. It will hold the last
+rectangle of the target.
+public Rectangle lastTargetPosition;
+//A private field lastScore type int. It will hold the last score of the game.
+public int lastScore;
+}
+}
+--------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+using System.IO;
+using System.Xml.Serialization;
+namespace TestCatchingGame
+{
+public class Game1 : Game
+{
+GraphicsDeviceManager graphics;
+SpriteBatch spriteBatch;
+//A private field player type Player. All the details needed for the player
+avatar will be stored here.
+Player player;
+//A private field target type Targets. All the details needed for the target
+avatar will be stored here.
+Targets target;
+//A private field gameLabels type GameLabels. All the details for the scoring and
+game time will be stored here.
+GameLabels gameLabels;
+//A private field timeDelay type int. This will be used for adjusting the count
+in game time.
+int timeDelay;
+//A private field gameBackgroundMusic and gameHit type SoundEffects. Used for
+accessing sound assets.
+SoundEffect gameBackgroundMusic,gameHit;
+//A private field gameBackgroundMusicInstance and gameHitInstance type
+SoundEffectInstance. Used to manipulate sounds effeciently.
+SoundEffectInstance gameBackgroundMusicInstance,gameHitInstance;
+//A privet field gameStart and keyPress type bool.
+bool gameStart,keyPress;
+//A private field playerName type string
+string playerName;
+public Game1()
+{
+graphics = new GraphicsDeviceManager(this);
+Content.RootDirectory = "Content";
+}
+//Initialization for player, target, gameLabels, and timeDelay fields.
+protected override void Initialize()
+{
+Random rand = new Random();
+Texture2D playerTexture = Content.Load<Texture2D>("TheProfessor");
+Rectangle playerDisplay = new
+Rectangle(rand.Next(0,Window.ClientBounds.Width-50), rand.Next(0,
+Window.ClientBounds.Height - 50), 50, 50);
+Rectangle playerSource = new Rectangle(0, 0, playerTexture.Width / 9,
+playerTexture.Height / 4);
+player = new Player(playerTexture,
+playerDisplay,
+playerSource,
+Color.White,
+new int[] { Window.ClientBounds.Width - 50, Window.ClientBounds.Height -
+50 });
+target = null;
+SpriteFont gameFont = Content.Load<SpriteFont>("GameFont");
+Vector2 timePosition = new Vector2(Window.ClientBounds.Width/2-50, 20);
+Vector2 scorePosition = new Vector2(10, 20);
+gameLabels = new GameLabels(gameFont, "", "", timePosition, scorePosition,
+Color.White, Color.Black, 30, -1);
+gameLabels.gameTimeSetup();
+gameLabels.scoreSetup();
+timeDelay = 0;
+gameStart = false;
+playerName = "";
+keyPress = false;
+base.Initialize();
+}
+protected override void LoadContent()
+{
+spriteBatch = new SpriteBatch(GraphicsDevice);
+//Initialization of gameBackgroundMusic
+gameBackgroundMusic = Content.Load<SoundEffect>("GBack");
+//Initialization of gameBackgroundMusicInstance using gameBackgroundMusic
+gameBackgroundMusicInstance = gameBackgroundMusic.CreateInstance();
+//Setting the gameBackgroundMusicInstance to loop
+gameBackgroundMusicInstance.IsLooped = true;
+//Playing the background music using gameBackgroundMusicInstance
+gameBackgroundMusicInstance.Play();
+}
+protected override void UnloadContent()
+{
+}
+protected override void Update(GameTime gameTime)
+{
+//Condition for starting the game
+if (gameStart)
+{
+//checks if the timeCtr field of gameLabels is greater than 0. Used to
+stop the game once the time reach 0.
+if (gameLabels.TimeCtr > 0)
+{
+//Used for passing the Keys in playerMove and playerAnimation method
+of player.
+foreach (Keys k in Keyboard.GetState().GetPressedKeys())
+{
+player.playerMove(k);
+player.playerAnimation(k);
+break;
+}
+create:
+//check if the value of target is equal to null. Used for creating
+new box.
+if (target == null)
+{
+the rectangle of the player
+Random rand = new Random();
+Texture2D targetTexture = Content.Load<Texture2D>("Box");
+Rectangle boxRectangle;
+//Iterate if the rectangle of the box collide or intersects with
+do
+{
+boxRectangle = new Rectangle(rand.Next(30,
+Window.ClientBounds.Width - 50), rand.Next(30, Window.ClientBounds.Height - 50), 50, 50);
+//check if the rectangle of boxRectangle and
+playerRectangleDisplay of player intersects.
+if (!boxRectangle.Intersects(player.PlayerRectangleDisplay))
+{
+break;
+}
+} while (true);
+//target field initialization
+target = new Targets(targetTexture, boxRectangle, Color.White);
+}
+//check if the rectangle of targetDisplay of target and
+playerRectangleDisplay of player intersects.
+if (player.PlayerRectangleDisplay.Intersects(target.TargetDisplay))
+{
+//Initialization of gameHit
+gameHit = Content.Load<SoundEffect>("hit");
+//Initialization of gameHitInstance using gameHit
+gameHitInstance = gameHit.CreateInstance();
+//Playing the sound effects for hit using gameHitInstance
+gameHitInstance.Play();
+gameLabels.scoreSetup();
+target = null;
+goto create;
+}
+//Condition of time delay
+if (timeDelay > 60)
+{
+timeDelay = 0;
+gameLabels.gameTimeSetup();
+}
+timeDelay++;
+//Condition to save the player name and score to HighestScore file.
+if(gameLabels.TimeCtr == 0)
+{
+//Creation of file HighestScore. True parameters means it will
+not create a new one if the HighestScore already exist.
+StreamWriter saveData = new StreamWriter("HighestScore", true);
+//Write the player name and game score in a file.
+saveData.WriteLine(playerName + "," + gameLabels.GameScore);
+//Closing the file Stream
+saveData.Close();
+//Creating an Object of GameData that will be stored in a file.
+GameData gd = new GameData();
+//Assigning the value of the data that will be stored in the file
+using GameData Object gd.
+gd.lastPlayerPosition = player.PlayerRectangleDisplay;
+gd.lastTargetPosition = target.TargetDisplay;
+gd.lastScore = int.Parse(gameLabels.GameScore);
+//Declaring an XmlSerializer and initialize it that will be used
+as format once the GameData object stored in a file.
+XmlSerializer sd = new XmlSerializer(typeof(GameData));
+saveData = new StreamWriter("LastData");
+//Saving the GameData object gd to a file in a XML format.
+sd.Serialize(saveData, gd);
+saveData.Close();
+}
+}
+else
+{
+//Reset the game
+if (Keyboard.GetState().IsKeyDown(Keys.S))
+{
+gameBackgroundMusic = null;
+gameBackgroundMusicInstance.Stop();
+Initialize();
+}
+}
+}
+else
+{
+//Allows to create a similar concept of a TextBox.
+Keys[] input = Keyboard.GetState().GetPressedKeys();
+if (!keyPress)
+{
+foreach (Keys k in input)
+{
+if (k == Keys.Back)
+{
+if (playerName.Trim() != "")
+{
+playerName = playerName.Substring(0, playerName.Length -
+1);
+}
+}
+else
+{
+char let = k.ToString()[0];
+if (char.IsLetter(let))
+{
+playerName += let;
+}
+}
+break;
+}
+keyPress = true;
+}
+else if(input.Length == 0)
+{
+keyPress = false;
+}
+//Key to press to start the game
+if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+{
+gameStart = true;
+}
+}
+base.Update(gameTime);
+}
+{
+protected override void Draw(GameTime gameTime)
+GraphicsDevice.Clear(Color.CornflowerBlue);
+spriteBatch.Begin();
+if (gameStart)
+{
+//Player Display
+spriteBatch.Draw(player.PlayerTexture, player.PlayerRectangleDisplay,
+player.PlayerRectangleSource, player.PlayerColor);
+if (target != null)
+{
+//Box Display
+spriteBatch.Draw(target.TargetTexture, target.TargetDisplay,
+target.TargetColor);
+}
+//Score Display
+spriteBatch.DrawString(gameLabels.GameFont, "Score:
+"+gameLabels.GameScore, gameLabels.ScorePosition, gameLabels.ScoreColor);
+//Time Display
+spriteBatch.DrawString(gameLabels.GameFont, gameLabels.GameTime,
+gameLabels.TimePosition, gameLabels.TimeColor);
+}
+else
+{
+spriteBatch.DrawString(gameLabels.GameFont, "Player Name: " +
+playerName, Vector2.Zero, Color.White);
+spriteBatch.DrawString(gameLabels.GameFont, "Press Enter to Start the
+Game", new Vector2(0, 50), Color.White);
+//Checking if the file HighestScore already exists
+if (File.Exists("HighestScore"))
+{
+//File Reading. Accessing the file HighestScore.
+StreamReader loadData = new StreamReader("HighestScore");
+int posY = 80;
+spriteBatch.DrawString(gameLabels.GameFont, "Name
+Score", new Vector2(0, posY), Color.White);
+//Checking if the reading of the file is not in the end of file.
+while (!loadData.EndOfStream)
+{
+posY += 30;
+//loading the line of data of the file and convert it to
+array using Split and assign it to data variable array.
+string[] data = loadData.ReadLine().Split(',');
+//Displaying the content of the file.
+spriteBatch.DrawString(gameLabels.GameFont,data[0]+"
+"+data[1], new Vector2(0, posY), Color.White);
+}
+loadData.Close();
+//Declaring an XmlSerializer and initialize it that will be used
+for instantiating a GameData object.
+XmlSerializer ld = new XmlSerializer(typeof(GameData));
+loadData = new StreamReader("LastData");
+//Loading(instantiating) GameData object then stored in gd
+variable type GameData.
+GameData gd = (GameData)ld.Deserialize(loadData);
+loadData.Close();
+//Displaying the last player position, target position, and score
+of the game.
+spriteBatch.DrawString(gameLabels.GameFont, "Last Game Data", new
+Vector2(250, 80), Color.White);
+spriteBatch.DrawString(gameLabels.GameFont, "Last Player
+Position: " + gd.lastPlayerPosition.Location, new Vector2(250, 110), Color.White);
+spriteBatch.DrawString(gameLabels.GameFont, "Last Target
+Position: " + gd.lastTargetPosition.Location, new Vector2(250, 140), Color.White);
+spriteBatch.DrawString(gameLabels.GameFont, "Last Game Score: " +
+gd.lastScore, new Vector2(250, 170), Color.White);
+}
+}
+spriteBatch.End();
+base.Draw(gameTime);
+}
+}
+}
